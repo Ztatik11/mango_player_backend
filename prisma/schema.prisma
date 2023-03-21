@@ -1,0 +1,91 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Albumes {
+  ID         String      @id @db.VarChar(200)
+  Nombre     String?     @db.VarChar(30)
+  ID_Artista String?     @db.VarChar(200)
+  Artistas   Artistas?   @relation(fields: [ID_Artista], references: [ID], onDelete: NoAction, onUpdate: NoAction, map: "fk_ID_Artista_Album")
+  Canciones  Canciones[]
+
+  @@index([ID_Artista], map: "fk_ID_Artista_Album")
+}
+
+model Artistas {
+  ID                 String               @id @db.VarChar(200)
+  Nombre             String?              @db.VarChar(30)
+  Albumes            Albumes[]
+  Artistas_favoritos Artistas_favoritos[]
+  Canciones          Canciones[]
+}
+
+model Artistas_favoritos {
+  ID_Usuario Int
+  ID_Artista String   @db.VarChar(200)
+  Artistas   Artistas @relation(fields: [ID_Artista], references: [ID], onDelete: NoAction, onUpdate: NoAction, map: "fk_ID_Artista_favoritos")
+  Usuarios   Usuarios @relation(fields: [ID_Usuario], references: [ID], onDelete: NoAction, onUpdate: NoAction, map: "fk_ID_Usuario")
+
+  @@id([ID_Usuario, ID_Artista])
+  @@index([ID_Artista], map: "fk_ID_Artista_favoritos")
+}
+
+model Canciones {
+  ID                 String               @id @db.VarChar(200)
+  Nombre             String?              @db.VarChar(50)
+  ID_Artista         String?              @db.VarChar(200)
+  ID_Genero          String?              @db.VarChar(200)
+  ID_Album           String?              @db.VarChar(200)
+  Enlace             String?              @db.VarChar(200)
+  Albumes            Albumes?             @relation(fields: [ID_Album], references: [ID], onDelete: NoAction, onUpdate: NoAction, map: "fk_ID_Cancion_Album")
+  Artistas           Artistas?            @relation(fields: [ID_Artista], references: [ID], onDelete: NoAction, onUpdate: NoAction, map: "fk_ID_Cancion_Artista")
+  Generos            Generos?             @relation(fields: [ID_Genero], references: [ID], onDelete: NoAction, onUpdate: NoAction, map: "fk_ID_Cancion_Genero")
+  Playlist_canciones Playlist_canciones[]
+
+  @@index([ID_Album], map: "fk_ID_Cancion_Album")
+  @@index([ID_Artista], map: "fk_ID_Cancion_Artista")
+  @@index([ID_Genero], map: "fk_ID_Cancion_Genero")
+}
+
+model Generos {
+  ID        String      @id @db.VarChar(200)
+  Nombre    String?     @db.VarChar(30)
+  Canciones Canciones[]
+}
+
+model Playlist_canciones {
+  ID_Playlist Int
+  ID_Cancion  String    @db.VarChar(200)
+  Canciones   Canciones @relation(fields: [ID_Cancion], references: [ID], onDelete: NoAction, onUpdate: NoAction, map: "fk_ID_Cancion")
+  Playlists   Playlists @relation(fields: [ID_Playlist], references: [ID], onDelete: NoAction, onUpdate: NoAction, map: "fk_ID_Playlist")
+
+  @@id([ID_Playlist, ID_Cancion])
+  @@index([ID_Cancion], map: "fk_ID_Cancion")
+}
+
+model Playlists {
+  ID                 Int                  @id
+  Nombre             String?              @db.VarChar(50)
+  ID_Usuario         Int?
+  Playlist_canciones Playlist_canciones[]
+  Usuarios           Usuarios?            @relation(fields: [ID_Usuario], references: [ID], onDelete: NoAction, onUpdate: NoAction, map: "fk_ID_Usuario_Playlist")
+
+  @@index([ID_Usuario], map: "fk_ID_Usuario_Playlist")
+}
+
+model Usuarios {
+  ID                 Int                  @id
+  Usuario            String?              @db.VarChar(15)
+  Nombre             String?              @db.VarChar(30)
+  Apellidos          String?              @db.VarChar(50)
+  Email              String?              @db.VarChar(30)
+  Clave              String?              @db.VarChar(20)
+  Fecha_nacimiento   DateTime?            @db.Date
+  Artistas_favoritos Artistas_favoritos[]
+  Playlists          Playlists[]
+}
