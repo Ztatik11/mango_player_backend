@@ -1,4 +1,4 @@
-import {indexRoutes} from './route/IndexRoute.js';
+import router from './route/IndexRoute.js';
 import express from "express";
 import {PrismaClient} from '@Prisma/Client'
 
@@ -6,7 +6,7 @@ const Prisma = new PrismaClient()
 
 const app = express()
 
-app.use(indexRoutes);
+app.use(router);
 
 const port= process.env.PORT||3000;
 app.listen(port);

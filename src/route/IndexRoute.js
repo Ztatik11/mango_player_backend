@@ -1,4 +1,4 @@
-import { vistaHome } from "../controllers/route";
+import { vistaHome } from "../controllers/route.js";
 import { Router } from "express";
 const router = Router();
 router.get('/', vistaHome)
