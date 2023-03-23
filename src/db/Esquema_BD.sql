@@ -1,9 +1,10 @@
+
 create database mangoplayer;
 
 use mangoplayer;
 
 create table Usuarios(
-    ID int PRIMARY KEY,
+    ID int PRIMARY KEY AUTO_INCREMENT,
     Usuario VARCHAR(15),
     Nombre VARCHAR(30),
     Apellidos VARCHAR(50),
@@ -13,7 +14,7 @@ create table Usuarios(
 );
 
 create table Playlists(
-    ID int PRIMARY KEY,
+    ID int PRIMARY KEY AUTO_INCREMENT,
     Nombre VARCHAR(50),
     ID_Usuario int,
 	Constraint fk_ID_Usuario_Playlist foreign key (ID_Usuario) references Usuarios(ID)

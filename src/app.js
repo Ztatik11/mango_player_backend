@@ -1,8 +1,6 @@
 import router from './route/IndexRoute.js';
 import express from "express";
-import {PrismaClient} from '@Prisma/Client'
 
-const Prisma = new PrismaClient()
 
 const app = express()
 
