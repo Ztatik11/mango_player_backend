@@ -22,3 +22,13 @@ export const Registro = async (req,res) =>{
     })
     res.json(result)
 }
+
+export const Login = async (req,res) =>{
+    const { email } = req.body;
+  const user = await Prisma.Usuarios.findFirst({
+    where: {
+        Email: email,
+    },
+  });
+  res.json(user);
+}
