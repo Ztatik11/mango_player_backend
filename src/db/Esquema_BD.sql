@@ -26,11 +26,11 @@ create table Artistas(
 );
 
 create table Artistas_favoritos(
-	ID_Usuario int,
+    ID_Usuario int,
     ID_Artista VARCHAR(200),
     Constraint fk_ID_Usuario foreign key (ID_Usuario) references Usuarios(ID),
     Constraint fk_ID_Artista_favoritos foreign key (ID_Artista) references Artistas(ID),
-	Primary key(ID_Usuario,ID_Artista)
+    Primary key(ID_Usuario,ID_Artista)
 );
 
 create table Albumes(
@@ -55,6 +55,14 @@ create table Canciones(
 	Constraint fk_ID_Cancion_Genero foreign key (ID_Genero) references Generos(ID),
     	Constraint fk_ID_Cancion_Artista foreign key (ID_Artista) references Artistas(ID),
 	Constraint fk_ID_Cancion_Album foreign key (ID_Album) references Albumes(ID)
+);
+
+create table Canciones_favoritas(
+    ID_Usuario int,
+    ID_Cancion VARCHAR(200),
+    Constraint fk_ID_Usuariofav foreign key (ID_Usuario) references Usuarios(ID),
+    Constraint fk_ID_Cancionfav foreign key (ID_Cancion) references Canciones(ID),
+	Primary key(ID_Usuario,ID_Cancion)
 );
 
 create table Playlist_canciones(
