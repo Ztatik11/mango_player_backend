@@ -1,5 +1,4 @@
 create database mangoplayer;
-
 use mangoplayer;
 
 create table Usuarios(
@@ -8,8 +7,9 @@ create table Usuarios(
     Nombre VARCHAR(30),
     Apellidos VARCHAR(50),
     Email VARCHAR(100),
-    Clave VARCHAR(20),
-    Fecha_nacimiento DATE
+    Clave VARCHAR(255),
+    Fecha_nacimiento DATE,
+    UNIQUE(Usuario,Email)
 );
 
 create table Playlists(

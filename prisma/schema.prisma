@@ -13,11 +13,13 @@ model Usuarios {
   Nombre              String?               @db.VarChar(30)
   Apellidos           String?               @db.VarChar(50)
   Email               String?               @db.VarChar(100)
-  Clave               String?               @db.VarChar(20)
+  Clave               String?               @db.VarChar(255)
   Fecha_nacimiento    DateTime?             @db.Date
   Artistas_favoritos  Artistas_favoritos[]
   Canciones_favoritas Canciones_favoritas[]
   Playlists           Playlists[]
+
+  @@unique([Usuario, Email], map: "Usuario")
 }
 
 model Albumes {

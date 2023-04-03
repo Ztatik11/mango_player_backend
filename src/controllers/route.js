@@ -1,4 +1,5 @@
 import {PrismaClient} from '@Prisma/Client'
+import bcrypt from "bcryptjs";
 
 const Prisma = new PrismaClient()
 
@@ -18,7 +19,7 @@ export const Registro_Usuario = async (req,res) =>{
             Nombre,
             Apellidos,
             Email,
-            Clave,
+            Clave:await bcrypt.hash(Clave,1),
             Fecha_nacimiento: new Date(Fecha_nacimiento),
         }
     })
@@ -125,13 +126,22 @@ export const Registro_Cancionfav = async (req,res) =>{
     })
     res.json(result)
 }
-
+//GET
 export const Login = async (req,res) =>{
-    const { email } = req.body;
+    const { Email,Clave } = req.body;
   const user = await Prisma.Usuarios.findFirst({
     where: {
-        Email: email,
+        Email: Email,
     },
   });
-  res.json(user);
+  const checkPassword = bcrypt.compareSync(Clave, user.Clave)
+  if(checkPassword){
+    res.json(user);
+  }else{
+    res.json("No son las credenciales correctas");
+  }
+  ;
 }
+
+
+
