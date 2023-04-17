@@ -1,4 +1,4 @@
-import {PrismaClient} from '@Prisma/Client'
+import {PrismaClient} from '@Prisma/Client';
 import bcrypt from "bcryptjs";
 
 const Prisma = new PrismaClient()
@@ -41,7 +41,7 @@ export const Registro_Artista = async (req,res) =>{
 export const Registro_Artistas_favoritos = async (req,res) =>{
     console.log(req.body)
     const {ID_Usuario,ID_Artista}=req.body
-    const result = await Prisma.Artistas.create({
+    const result = await Prisma.Artistas_favoritos.create({
         data:{
             ID_Usuario,
             ID_Artista
