@@ -93,11 +93,13 @@ export const Registro_Album = async (req, res) => {
 */
 export const Registro_Cancion = async (req, res) => {
   console.log(req.body);
-  const { ID, Nombre, Enlace } = req.body;
+  const { ID, Nombre,Autor,Genero,Enlace } = req.body;
   const result = await Prisma.Canciones.create({
     data: {
       ID,
       Nombre,
+      Autor,
+      Genero,
       Enlace
     },
   });

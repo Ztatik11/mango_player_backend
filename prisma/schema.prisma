@@ -14,7 +14,7 @@ model Usuarios {
   Nombre              String?               @db.VarChar(30)
   Apellidos           String?               @db.VarChar(50)
   Email               String?               @db.VarChar(100)
-  Clave               String?               @db.VarChar(255)
+  Clave               String?               @db.VarChar(355)
   Fecha_nacimiento    DateTime?             @db.Date
   Canciones_favoritas Canciones_favoritas[]
   Playlists           Playlists[]
@@ -25,6 +25,8 @@ model Usuarios {
 model Canciones {
   ID                  String                @id @db.VarChar(200)
   Nombre              String?               @db.VarChar(50)
+  Autor               String?               @db.VarChar(100)
+  Genero              String?               @db.VarChar(100)
   Enlace              String?               @db.VarChar(200)
   Canciones_favoritas Canciones_favoritas[]
   Playlist_canciones  Playlist_canciones[]
