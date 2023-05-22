@@ -185,6 +185,49 @@ export const DeleteUser = async (req, res) => {
   return result
 }
 
+//UPDATE
+export const updateUser = async (req, res) => {
+  const { ID ,Nombre, Apellidos, Email, Fecha_nacimiento } = req.body;
+
+  try {
+    const user = await Prisma.Usuarios.findUnique({
+      where: { id: parseInt(ID) },
+    });
+
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    const dataToUpdate = {};
+
+    if (Nombre) {
+      dataToUpdate.name = Nombre;
+    }
+
+    if (Apellidos) {
+      dataToUpdate.Apellidos = Apellidos;
+    }
+
+    if (Email) {
+      dataToUpdate.Email = Email;
+    }
+
+    if (Fecha_nacimiento) {
+      dataToUpdate.dateOfBirth = new Date(Fecha_nacimiento);
+    }
+
+    const updatedUser = await Prisma.Usuarios.update({
+      where: { id: parseInt(ID) },
+      data: dataToUpdate,
+    });
+
+    res.json(updatedUser);
+  } catch (error) {
+    console.error('Error updating user:', error);
+    res.status(500).json({ error: 'An error occurred while updating the user.' });
+  }
+};
+
 //ALTER FAV MUSIC
 export const postFav = async (req, res) => {
   const userId = req.body.ID_Usuario

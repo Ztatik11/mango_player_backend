@@ -1,4 +1,4 @@
-import {vistaHome, Registro_Usuario, Registro_Cancion, Registro_Playlist,Registro_contenido_Playlist,Login, getUsers,DeleteUser,getSongs,postFav} from "../controllers/route.js";
+import {vistaHome, Registro_Usuario, Registro_Cancion, Registro_Playlist,Registro_contenido_Playlist,Login, getUsers,DeleteUser,getSongs,postFav, updateUser} from "../controllers/route.js";
 import { Router } from "express";
 const router = Router();
 
@@ -18,6 +18,7 @@ router.get('/login', Login)
 router.get('/getUsers', getUsers)
 router.get('/getSongs', getSongs)
 router.delete('/deleteUser', DeleteUser)
+router.put('/updatedUser',updateUser)
 
 
 export default router;
