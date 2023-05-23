@@ -191,7 +191,7 @@ export const updateUser = async (req, res) => {
 
   try {
     const user = await Prisma.Usuarios.findUnique({
-      where: { id: parseInt(ID) },
+      where: { ID: parseInt(ID) },
     });
 
     if (!user) {
@@ -201,7 +201,7 @@ export const updateUser = async (req, res) => {
     const dataToUpdate = {};
 
     if (Nombre) {
-      dataToUpdate.name = Nombre;
+      dataToUpdate.Nombre = Nombre;
     }
 
     if (Apellidos) {
@@ -213,11 +213,11 @@ export const updateUser = async (req, res) => {
     }
 
     if (Fecha_nacimiento) {
-      dataToUpdate.dateOfBirth = new Date(Fecha_nacimiento);
+      dataToUpdate.Fecha_nacimiento = new Date(Fecha_nacimiento);
     }
 
     const updatedUser = await Prisma.Usuarios.update({
-      where: { id: parseInt(ID) },
+      where: { ID: parseInt(ID) },
       data: dataToUpdate,
     });
 
