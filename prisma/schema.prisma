@@ -9,37 +9,36 @@ datasource db {
 }
 
 model Usuarios {
-  ID                  Int                   @id @default(autoincrement())
-  Usuario             String?               @db.VarChar(15)
-  Nombre              String?               @db.VarChar(30)
-  Apellidos           String?               @db.VarChar(50)
-  Email               String?               @db.VarChar(100)
-  Clave               String?               @db.VarChar(355)
-  Fecha_nacimiento    DateTime?             @db.Date
-  Canciones_favoritas Canciones_favoritas[]
-  Playlists           Playlists[]
+  ID               Int         @id @default(autoincrement())
+  Usuario          String?     @db.VarChar(15)
+  Nombre           String?     @db.VarChar(30)
+  Apellidos        String?     @db.VarChar(50)
+  Email            String?     @db.VarChar(100)
+  Clave            String?     @db.VarChar(355)
+  Fecha_nacimiento DateTime?   @db.Date
+  Playlists        Playlists[]
 
   @@unique([Usuario, Email], map: "Usuario")
 }
 
 model Canciones {
-  ID                  String                @id @db.VarChar(200)
-  Nombre              String?               @db.VarChar(50)
-  Autor               String?               @db.VarChar(100)
-  Genero              String?               @db.VarChar(100)
-  Enlace              String?               @db.VarChar(200)
-  Canciones_favoritas Canciones_favoritas[]
-  Playlist_canciones  Playlist_canciones[]
+  trackid            String               @id @db.VarChar(200)
+  url                String?              @db.VarChar(400)
+  title              String?              @db.VarChar(50)
+  artist             String?              @db.VarChar(100)
+  artwork            String?              @db.VarChar(300)
+  Playlist_canciones Playlist_canciones[]
 }
 
 model Playlist_canciones {
-  ID_Playlist Int
-  ID_Cancion  String    @db.VarChar(200)
-  Canciones   Canciones @relation(fields: [ID_Cancion], references: [ID], onDelete: NoAction, onUpdate: NoAction, map: "fk_ID_Cancion")
-  Playlists   Playlists @relation(fields: [ID_Playlist], references: [ID], onDelete: NoAction, onUpdate: NoAction, map: "fk_ID_Playlist")
+  ID          Int        @id @default(autoincrement())
+  ID_Playlist Int?
+  ID_Cancion  String?    @db.VarChar(200)
+  Canciones   Canciones? @relation(fields: [ID_Cancion], references: [trackid], onDelete: NoAction, onUpdate: NoAction, map: "fk_ID_Cancion")
+  Playlists   Playlists? @relation(fields: [ID_Playlist], references: [ID], onDelete: NoAction, onUpdate: NoAction, map: "fk_ID_Playlist")
 
-  @@id([ID_Playlist, ID_Cancion])
   @@index([ID_Cancion], map: "fk_ID_Cancion")
+  @@index([ID_Playlist], map: "fk_ID_Playlist")
 }
 
 model Playlists {
@@ -50,14 +49,4 @@ model Playlists {
   Usuarios           Usuarios?            @relation(fields: [ID_Usuario], references: [ID], onDelete: NoAction, onUpdate: NoAction, map: "fk_ID_Usuario_Playlist")
 
   @@index([ID_Usuario], map: "fk_ID_Usuario_Playlist")
-}
-
-model Canciones_favoritas {
-  ID_Usuario Int
-  ID_Cancion String    @db.VarChar(200)
-  Canciones  Canciones @relation(fields: [ID_Cancion], references: [ID], onDelete: NoAction, onUpdate: NoAction, map: "fk_ID_Cancionfav")
-  Usuarios   Usuarios  @relation(fields: [ID_Usuario], references: [ID], onDelete: NoAction, onUpdate: NoAction, map: "fk_ID_Usuariofav")
-
-  @@id([ID_Usuario, ID_Cancion])
-  @@index([ID_Cancion], map: "fk_ID_Cancionfav")
 }

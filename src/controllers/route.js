@@ -93,14 +93,14 @@ export const Registro_Album = async (req, res) => {
 */
 export const Registro_Cancion = async (req, res) => {
   console.log(req.body);
-  const { ID, Nombre,Autor,Genero,Enlace } = req.body;
+  const { trackid,url,title,artist,artwork } = req.body;
   const result = await Prisma.Canciones.create({
     data: {
-      ID,
-      Nombre,
-      Autor,
-      Genero,
-      Enlace
+      trackid:trackid,
+      url:url,
+      title:title,
+      artist:artist,
+      artwork:artwork
     },
   });
   res.json(result);
@@ -120,11 +120,15 @@ export const Registro_Playlist = async (req, res) => {
 
 export const Registro_contenido_Playlist = async (req, res) => {
   console.log(req.body);
-  const { Nombre, ID_Usuario } = req.body;
+  const { ID_Playlist, ID_Cancion } = req.body;
   const result = await Prisma.Playlist_canciones.create({
     data: {
-      Nombre,
-      ID_Usuario,
+      Playlists: {
+        connect: { ID: ID_Playlist }
+      },
+      Canciones: {
+        connect: { trackid: ID_Cancion }
+      }
     },
   });
   res.json(result);
@@ -172,6 +176,23 @@ export const getUsers = async (req, res) => {
 export const getSongs = async (req, res) => {
   const songs = await Prisma.Canciones.findMany();
   res.json(songs);
+};
+
+export const getPlayList = async (req, res) => {
+  const playlists = await Prisma.Playlists.findMany({
+    where: {
+      ID_Usuario: 1,
+    },
+    include: {
+      Playlist_canciones: {
+        include: {
+          Canciones: true,
+        },
+      },
+    },
+  });
+
+  res.json(playlists);
 };
 //DELETE
 export const DeleteUser = async (req, res) => {
