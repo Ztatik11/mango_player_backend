@@ -206,6 +206,18 @@ export const DeleteUser = async (req, res) => {
   return result
 }
 
+export const DeletePlaylist = async (req, res) => {
+  
+  const {id} = req.body
+  console.log(id)
+  const result = await Prisma.Playlists.delete({
+    where: {
+       ID: id,
+    }
+  })
+  return result
+}
+
 //UPDATE
 export const updateUser = async (req, res) => {
   const { ID ,Nombre, Apellidos, Email, Fecha_nacimiento } = req.body;
