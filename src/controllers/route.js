@@ -107,14 +107,26 @@ export const Registro_Cancion = async (req, res) => {
 };
 
 export const Registro_Playlist = async (req, res) => {
-  console.log(req.body);
   const { Nombre, ID_Usuario } = req.body;
+
+  // Verificar si ya existe una playlist con el mismo nombre y el mismo ID de usuario
+  const existingPlaylist = await Prisma.Playlists.findFirst({
+    where: { Nombre, ID_Usuario },
+  });
+
+  if (existingPlaylist) {
+    // Ya existe una playlist con el mismo nombre y el mismo ID de usuario
+    return res.status(400).json({ error: 'Ya existe una playlist con el mismo nombre' });
+  }
+
+  // Crear la nueva playlist
   const result = await Prisma.Playlists.create({
     data: {
       Nombre,
       ID_Usuario,
     },
   });
+
   res.json(result);
 };
 
@@ -181,7 +193,7 @@ export const getSongs = async (req, res) => {
 export const getPlayList = async (req, res) => {
   const playlists = await Prisma.Playlists.findMany({
     where: {
-      ID_Usuario: 1,
+      ID_Usuario: req.body.ID_Usuario,
     },
     include: {
       Playlist_canciones: {
@@ -210,6 +222,11 @@ export const DeletePlaylist = async (req, res) => {
   
   const {id} = req.body
   console.log(id)
+  await Prisma.Playlist_canciones.deleteMany({
+    where: {
+      ID_Playlist: id,
+    },
+  });
   const result = await Prisma.Playlists.delete({
     where: {
        ID: id,
