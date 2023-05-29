@@ -133,17 +133,52 @@ export const Registro_Playlist = async (req, res) => {
 export const Registro_contenido_Playlist = async (req, res) => {
   console.log(req.body);
   const { ID_Playlist, ID_Cancion } = req.body;
-  const result = await Prisma.Playlist_canciones.create({
-    data: {
-      Playlists: {
-        connect: { ID: ID_Playlist }
+
+  try {
+    const playlist = await Prisma.Playlists.findUnique({
+      where: { ID: ID_Playlist },
+    });
+
+    if (!playlist) {
+      // La playlist no existe
+      return res.status(404).json({ error: "La playlist no existe" });
+    }
+
+    const song = await Prisma.Canciones.findUnique({
+      where: { trackid: ID_Cancion },
+    });
+
+    if (!song) {
+      const { trackid, url, title, artist, artwork } = req.body;
+
+      song = await Prisma.Canciones.create({
+        data: {
+          trackid,
+          url,
+          title,
+          artist,
+          artwork,
+        },
+      });
+    }
+
+    // Agregar la canción a la playlist
+    const result = await Prisma.Playlist_canciones.create({
+      data: {
+        Playlists: {
+          connect: { ID: ID_Playlist },
+        },
+        Canciones: {
+          connect: { trackid: ID_Cancion },
+        },
       },
-      Canciones: {
-        connect: { trackid: ID_Cancion }
-      }
-    },
-  });
-  res.json(result);
+    });
+
+    res.json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Se produjo un error en el servidor" });
+  }
 };
 
 export const Registro_Cancionfav = async (req, res) => {
