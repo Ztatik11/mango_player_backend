@@ -132,7 +132,8 @@ export const Registro_Playlist = async (req, res) => {
 
 export const Registro_contenido_Playlist = async (req, res) => {
   console.log(req.body);
-  const { ID_Playlist, ID_Cancion } = req.body;
+  const { ID_Playlist} = req.body;
+  const { trackid, url, title, artist, artwork } = req.body.Canciones;
 
   try {
     const playlist = await Prisma.Playlists.findUnique({
@@ -145,11 +146,11 @@ export const Registro_contenido_Playlist = async (req, res) => {
     }
 
     const song = await Prisma.Canciones.findUnique({
-      where: { trackid: ID_Cancion },
+      where: { trackid: trackid},
     });
 
     if (!song) {
-      const { trackid, url, title, artist, artwork } = req.body;
+      //const { trackid, url, title, artist, artwork } = req.body.Canciones;
 
       song = await Prisma.Canciones.create({
         data: {
@@ -169,7 +170,7 @@ export const Registro_contenido_Playlist = async (req, res) => {
           connect: { ID: ID_Playlist },
         },
         Canciones: {
-          connect: { trackid: ID_Cancion },
+          connect: { trackid: trackid },
         },
       },
     });
@@ -267,6 +268,19 @@ export const DeletePlaylist = async (req, res) => {
        ID: id,
     }
   })
+  return result
+}
+
+export const DeletePlaylistSong = async (req, res) => {
+  const { ID_Playlist} = req.body;
+  const { trackid, url, title, artist, artwork } = req.body.Canciones;
+  console.log(id)
+  await Prisma.Playlist_canciones.deleteMany({
+    where: {
+      ID_Playlist: ID_Playlist,
+      trackid: trackid
+    },
+  });
   return result
 }
 
