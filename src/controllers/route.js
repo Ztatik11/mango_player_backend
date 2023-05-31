@@ -272,8 +272,8 @@ export const DeletePlaylist = async (req, res) => {
 }
 
 export const DeletePlaylistSong = async (req, res) => {
-  const { ID_Playlist} = req.body;
-  const { trackid, url, title, artist, artwork } = req.body.Canciones;
+  const {ID_Playlist} = req.body;
+  const {trackid} = req.body.Canciones;
   console.log(id)
   await Prisma.Playlist_canciones.deleteMany({
     where: {
