@@ -38,59 +38,7 @@ export const Registro_Usuario = async (req, res) => {
     }
   }
 };
-/*
-export const Registro_Artista = async (req, res) => {
-  console.log(req.body);
-  const { ID, Nombre } = req.body;
-  const result = await Prisma.Artistas.create({
-    data: {
-      ID,
-      Nombre,
-    },
-  });
-  res.json(result);
-};
-*/
-/*
-export const Registro_Artistas_favoritos = async (req, res) => {
-  console.log(req.body);
-  const { ID_Usuario, ID_Artista } = req.body;
-  const result = await Prisma.Artistas_favoritos.create({
-    data: {
-      ID_Usuario,
-      ID_Artista,
-    },
-  });
-  res.json(result);
-};
-*/
-/*
-export const Registro_Genero = async (req, res) => {
-  console.log(req.body);
-  const { ID, Nombre } = req.body;
-  const result = await Prisma.Generos.create({
-    data: {
-      ID,
-      Nombre,
-    },
-  });
-  res.json(result);
-};
-*/
-/*
-export const Registro_Album = async (req, res) => {
-  console.log(req.body);
-  const { ID, Nombre, ID_Artista } = req.body;
-  const result = await Prisma.Albumes.create({
-    data: {
-      ID,
-      Nombre,
-      ID_Artista,
-    },
-  });
-  res.json(result);
-};
-*/
+
 export const Registro_Cancion = async (req, res) => {
   console.log(req.body);
   const { trackid,url,title,artist,artwork } = req.body;
@@ -248,7 +196,10 @@ export const DeleteUser = async (req, res) => {
   const {id} = req.body
   const result = await Prisma.usuarios.delete({
     where: {
-       ID: id,
+      ID: id
+    },
+    include: {
+      Playlists: true
     }
   })
   return result
